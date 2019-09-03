@@ -10,8 +10,8 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 Vue.use(Loading);
 Vue.use(require('vue-moment'));
 
-var element = document.createElement('div');
-document.body.appendChild(element);
+//var element = document.createElement('div');
+//document.body.appendChild(element);
 import app from './App';
 import Wiki from './Wiki';
 import Index from './Index';
@@ -32,4 +32,4 @@ const router = new VueRouter({
     routes // short for `routes: routes`
 })
 app.router = router;
-new Vue(app).$mount(element);
+new Vue(app).$mount('#app');
