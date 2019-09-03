@@ -1,0 +1,24 @@
+{
+  "name": "wikisv",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bsv": "^0.30.0",
+    "markdown-it": "^9.1.0",
+    "marked": "git+https://github.com/zhangweis/marked.git",
+    "vue-loading-overlay": "^3.2.0",
+    "vue-moment": "^4.0.0",
+    "vue-money-button": "^0.2.3",
+    "vue-router": "^3.1.3"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^3.11.0",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
