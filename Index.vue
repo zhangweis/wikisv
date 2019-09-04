@@ -27,11 +27,16 @@ export default {
   methods: {
   @Progress
    async display(params) {
-var [content, pages] = await Promise.all([wikiLoader.load({page: 'index'}),
-	wikiLoader.recentPages(params)]);
+			await Promise.all([this.loadIndex(), this.loadRecentPages(params)]);
+  },
+	async loadIndex() {
+		var content = await wikiLoader.load({page: 'index'});
 this.content = wikiLoader.marked(content.content);
+	},
+	async loadRecentPages(params) {
+	var pages = await wikiLoader.recentPages(params);
 this.recentPages = pages;
-  }
+	}
   },
     async mounted() {
 this.display(this.$route.params);
