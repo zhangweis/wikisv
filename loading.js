@@ -1,17 +1,17 @@
 import { BehaviorSubject } from 'rxjs';
 
-const $loading = new BehaviorSubject(false);
-const $failMessage = new BehaviorSubject('');
+const loading$ = new BehaviorSubject(false);
+const failMessage$ = new BehaviorSubject('');
 function load() {
-  $loading.next(true);
+  loading$.next(true);
 }
 
 function loadFailed(e) {
-  $failMessage.next(''+e);
+  failMessage$.next(''+e);
   throw e;
 }
 function loadDone() {
-  $loading.next(false);
+  loading$.next(false);
 }
 const loading = {load,loadDone,loadFailed};
 function Progress(target, property, descriptor) {
@@ -29,4 +29,4 @@ function Progress(target, property, descriptor) {
   }
 
 }
-export {$loading, $failMessage, loading, Progress};
+export {loading$, failMessage$, loading, Progress};

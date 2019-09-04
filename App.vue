@@ -13,14 +13,14 @@ padding: 5px
 </template>
 <script>
 import Loading from 'vue-loading-overlay'; 
-import {$loading,$failMessage} from './loading';
+import {loading$,failMessage$} from './loading';
 export default {
 components:{
 	Loading
 },
   subscriptions: {
-    loading: $loading,
-    loadingFailMessage:$failMessage
+    loading: loading$,
+    loadingFailMessage:failMessage$
   },
   data() {
     return {
