@@ -4,58 +4,54 @@ padding:5px
 }
 </style>
 <template>
-  <div>
-        <loading :active.sync="isLoading" 
-        :is-full-page="true"></loading>
-				<div v-if='loadingFailMessage'>Loading failed ({{loadingFailMessage}}). Please <button onclick='location.reload();'>refresh</button></div>
+  <div style='display:flex'>
+<div>
+
 <h1>Recent Changes</h1>
 <hr/>
 <div v-for='change in recentChanges'>
-<router-link class='item' :to="{ name: 'page', params: { type:'tx',page: change.tx.tx.h }}">{{change.tx.tx.h}} @ {{(change.tx.blk||{}).t  | moment("from", "now")}}</router-link>
-<router-link class='item' :to="{ name: 'edit', params: { type:'tx',page: change.tx.tx.h }}">Resume</router-link>
+<a href='#' onclick='return false;' @click='show(change.tx.tx.h)'>
+<span :title='change.tx.tx.h'>{{change.tx.tx.h  | truncate(6,'..')}}</span> @ {{(change.tx.blk||{}).t  | moment("from", "now")}}
+</a>
+<router-link class='item' :to="{ name: 'page', params: { type:'tx',page: change.tx.tx.h }}">View</router-link>
+<router-link class='item' :to="{ name: 'edit', params: { type:'tx',page: change.tx.tx.h }}">Restore</router-link>
  
 </div>
+</div>
+<div v-if='preview'>
+<hr/>
+<h1>Verion Preview</h1>
+<hr/>
+<div v-html='preview'/>
 </div>
 </div>
 </template>
 <script>
-    import Loading from 'vue-loading-overlay';
 import wikiLoader from './wiki-loader'
+import {Progress} from './loading';
 
 export default {
-components:{
-	Loading
-},
 watch: {
     '$route' (to, from) {
 this.display(to.params);
     }
   },  data() {
     return {
+      preview: '',
 			recentChanges:[],
-loadingFailMessage:'',
-isLoading: false,
-loaded: false
     }
   },
   methods: {
-	 async display(params) {
-		this.loadingFailMessage = '';
-		this.isLoading = true;
-		try {
-			return await this.display1(params);
-		} catch (e) {
-			this.loadingFailMessage = ''+e;
-			throw e;
-		} finally {
-			this.isLoading = false;
-		}
-	},
-   async display1(params) {
+  @Progress
+   async display(params) {
 var changes = await wikiLoader.recentChanges({name:params.page});
-this.loaded = true;
 this.recentChanges = changes;
 console.log(changes);
+  },
+  @Progress
+  async show(txid) {
+    var wiki = await wikiLoader.load({page:txid,type:'tx'});
+    this.preview = wikiLoader.marked(wiki.content);
   }
   },
     async mounted() {
