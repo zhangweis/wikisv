@@ -27,9 +27,9 @@ export default {
   methods: {
   @Progress
    async display(params) {
-var content = await wikiLoader.load({page: 'index'});
+var [content, pages] = await Promise.all([wikiLoader.load({page: 'index'}),
+	wikiLoader.recentPages(params)]);
 this.content = wikiLoader.marked(content.content);
-var pages = await wikiLoader.recentPages(params);
 this.recentPages = pages;
   }
   },

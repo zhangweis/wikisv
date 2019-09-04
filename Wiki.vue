@@ -1,6 +1,6 @@
 <template>
   <div>
-<div v-if='!content'>
+<div v-if='!content&&loaded'>
 Not found<br/>
 </div>
 <div class='menu-bar'>

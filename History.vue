@@ -6,7 +6,8 @@ padding:5px
 <template>
   <div style='display:flex'>
 <div>
-
+<router-link class='item' :to="{ name: 'home'}">Home</router-link> 
+<hr/>
 <h1>Recent Changes</h1>
 <hr/>
 <div v-for='change in recentChanges'>
@@ -19,7 +20,6 @@ padding:5px
 </div>
 </div>
 <div v-if='preview'>
-<hr/>
 <h1>Verion Preview</h1>
 <hr/>
 <div v-html='preview'/>
