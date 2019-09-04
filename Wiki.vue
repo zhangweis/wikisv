@@ -1,8 +1,5 @@
 <template>
   <div>
-        <loading :active.sync="isLoading" 
-        :is-full-page="true"></loading>
-				<div v-if='loadingFailMessage'>Loading failed ({{loadingFailMessage}}). Please <button onclick='location.reload();'>refresh</button></div>
 <div v-if='!content'>
 Not found<br/>
 </div>
@@ -27,13 +24,10 @@ Not found<br/>
 </div>
 </template>
 <script>
-    import Loading from 'vue-loading-overlay';
 import wikiLoader from './wiki-loader'
+import {Progress} from './loading';
 
 export default {
-components:{
-	Loading
-},
 watch: {
     '$route' (to, from) {
 console.log(to, from);
@@ -45,26 +39,12 @@ this.display(to.params);
 			showMd: false,
 			wiki:{tx:{tx:{}}},
       content:'',
-loadingFailMessage:'',
-isLoading: false,
 loaded: false
     }
   },
   methods: {
-	 async display(params) {
-		this.loadingFailMessage = '';
-		this.isLoading = true;
-		try {
-			return await this.display1(params);
-		} catch (e) {
-			this.loadingFailMessage = ''+e;
-			throw e;
-		} finally {
-			this.isLoading = false;
-		}
-	},
-   async display1(params) {
-//if (Math.random()<0.5) throw 'test '+Date();
+	@Progress
+   async display(params) {
 var wiki = await wikiLoader.load(params);
 if (!wiki) wiki = {tx:{tx:{}},blk:{},content:'',name:params.page};
 var content=wiki?wiki.content:``;

@@ -27,6 +27,7 @@
 </template>
 <script>
 import MoneyButton from 'vue-money-button'
+import {Progress} from './loading';
 import wikiLoader from './wiki-loader'
 import bsv from 'bsv'
 export default {
@@ -65,11 +66,10 @@ return out.toASM();
 }
 },
 	methods:{
+    @Progress
 		async load(params) {
 		this.loaded = false;
 		this.name = this.content = ''
-		let loader = this.$loading.show();
-    try {
     var wiki = await wikiLoader.load(params);
 			if (wiki) {
 				this.loaded = true;
@@ -78,9 +78,6 @@ return out.toASM();
 			} else {
 				this.name = params.page=='<new>'?'':params.page;
 			}
-    }finally{
-			loader.hide();
-		}
 		}
 	},
   async mounted() {

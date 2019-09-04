@@ -1,8 +1,5 @@
 <template>
   <div>
-        <loading :active.sync="isLoading" 
-        :is-full-page="true"></loading>
-				<div v-if='loadingFailMessage'>Loading failed ({{loadingFailMessage}}). Please <button onclick='location.reload();'>refresh</button></div>
 <router-link class='item' :to="{ name: 'page', params: { page: 'index' }}">Index Page</router-link> 
 <create-link/>
 
@@ -17,33 +14,16 @@
 </template>
 <script>
 import wikiLoader from './wiki-loader'
-import Loading from 'vue-loading-overlay'; 
+import {Progress} from './loading';
 export default {
-components:{
-	Loading
-},
   data() {
     return {
       recentPages:[],
-loadingFailMessage:'',
-isLoading: false,
-loaded: false
     }
   },
   methods: {
-	 async display(params) {
-		this.loadingFailMessage = '';
-		this.isLoading = true;
-		try {
-			return await this.display1(params);
-		} catch (e) {
-			this.loadingFailMessage = ''+e;
-			throw e;
-		} finally {
-			this.isLoading = false;
-		}
-	},
-   async display1(params) {
+  @Progress
+   async display(params) {
 var pages = await wikiLoader.recentPages(params);
 this.recentPages = pages;
   }

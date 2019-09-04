@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueRx from 'vue-rx'
+
+Vue.use(VueRx)
 
 Vue.use(VueRouter)
 // Import component
