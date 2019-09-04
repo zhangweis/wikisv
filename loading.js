@@ -4,7 +4,6 @@ const $loading = new BehaviorSubject(false);
 const $failMessage = new BehaviorSubject('');
 function load() {
   $loading.next(true);
-console.log('load started');
 }
 
 function loadFailed(e) {

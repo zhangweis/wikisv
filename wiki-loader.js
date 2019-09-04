@@ -8,12 +8,10 @@ function sanitize(str) {
   })
 }
 function linkUrl(href) {
-	var wikiPrefix = 'wiki:';
-	if (href.substring(0,wikiPrefix.length)==wikiPrefix) {
-		var wikiName = href.substring(wikiPrefix.length);
-		return `#/wiki/${wikiName}`;
-	}
-  const exec = /b:\/\/(.*)$/.exec(href);
+  var exec;
+  exec = /^wiki:(.*)$/.exec(href);
+  if (exec && exec[1]) return '#/wiki/'+exec[1];
+  exec = /^b:\/\/(.*)$/.exec(href);
 	if (exec && exec[1]) return 'https://lol.bitdb.network/assets/1BvPxwDoz6DR9qedZrKJjWio6Gm7UCPGXU/raw/'+exec[1];
 	return href;
 }
