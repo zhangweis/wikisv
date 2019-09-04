@@ -10,6 +10,8 @@
 <router-link :to="{ name: 'page', params: { page: page.name }}">{{page.name}}</router-link> 
  @ {{(page.tx.blk||{}).t  | moment("from", "now")}}
 </div>
+<hr/>
+<div v-html='content'/>
 </div>
 </template>
 <script>
@@ -18,12 +20,15 @@ import {Progress} from './loading';
 export default {
   data() {
     return {
-      recentPages:[],
+			content:'',
+      recentPages:[]
     }
   },
   methods: {
   @Progress
    async display(params) {
+var content = await wikiLoader.load({page: 'index'});
+this.content = wikiLoader.marked(content.content);
 var pages = await wikiLoader.recentPages(params);
 this.recentPages = pages;
   }
