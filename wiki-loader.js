@@ -117,6 +117,7 @@ var header = {
   headers: { key: "18doZeakgc7BeKs2L1ZWKMnoJnRQmoJy2i" }
 };
 var json = await (await fetch(url, header)).json();
+json.u.reverse();
 	return json;
 }
   async load(params) {
