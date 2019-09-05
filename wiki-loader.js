@@ -7,17 +7,17 @@ function sanitize(str) {
     return "&quot;"
   })
 }
-function linkUrl(href) {
+function linkUrl(href,from) {
   var exec;
   exec = /^wiki:(.*)$/.exec(href);
   if (exec && exec[1]) return '#/wiki/'+exec[1];
   exec = /^b:\/\/(.*)$/.exec(href);
-	if (exec && exec[1]) return 'https://lol.bitdb.network/assets/1BvPxwDoz6DR9qedZrKJjWio6Gm7UCPGXU/raw/'+exec[1];
+	if (exec && exec[1]) return (from=='img'?'https://lol.bitdb.network/assets/1BvPxwDoz6DR9qedZrKJjWio6Gm7UCPGXU/raw/':'https://bico.media/')+exec[1];
 	return href;
 }
 renderer.image = function (src, title, alt) {
   const exec = /=\s*(\d*)\s*x\s*(\d*)\s*$/.exec(title)
-  let res = '<img src="' + linkUrl(sanitize(src)) + '" alt="' + sanitize(alt)
+  let res = '<img src="' + linkUrl(sanitize(src), 'img') + '" alt="' + sanitize(alt)
   if (exec && exec[1]) res += '" height="' + exec[1]
   if (exec && exec[2]) res += '" width="' + exec[2]
   return res + '">'
