@@ -29,7 +29,6 @@
 import MoneyButton from 'vue-money-button'
 import {Progress} from './loading';
 import wikiLoader from './wiki-loader'
-import bsv from 'bsv'
 export default {
   components: {
     MoneyButton
@@ -59,10 +58,10 @@ outputs() {
     }]
 },
 opReturn() {
-	var out = bsv.Script.buildSafeDataOut(['19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut',this.content,'text/markdown','utf8',this.name+'.md']);
+	var out = 'OP_FALSE OP_RETURN '+Buffer.from('19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut').toString('hex')+' ' + Buffer.from(this.content).toString('hex')+' '+Buffer.from('text/markdown').toString('hex')+' '+Buffer.from('utf8').toString('hex')+' ' +Buffer.from(this.name+'.md').toString('hex');
 
-	console.log(out.toASM());
-return out.toASM();
+	console.log(out);
+return out;
 }
 },
 	methods:{

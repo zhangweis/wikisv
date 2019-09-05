@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bsv": "^0.30.0",
     "markdown-it": "^9.1.0",
     "marked": "git+https://github.com/zhangweis/marked.git",
     "rxjs": "^6.5.3",
