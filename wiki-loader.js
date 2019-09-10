@@ -32,7 +32,7 @@ var oldHeading = renderer.heading;
 var headings = [];
 renderer.heading = function(text, level, raw, slugger) {
 	var ret = oldHeading.apply(this, arguments);
-	if (headings.length ==0) ret = '__INDEX__GOES__HERE__'+ret; 
+	if (headings.length ==0) ret = '<index-table :headings="headings"/>'+ret;//'__INDEX__GOES__HERE__'+ret; 
 	headings.push( {text,level,raw, slugId: slugger.lastSlug});
 	return ret;
 }
@@ -135,7 +135,7 @@ if (params.type=='tx') {
   queries.find = {"tx.h":params.page};
 }
 
-var json = await this.loadWikis(queries);
+var json = (await this.loadWikis(queries));
 var tx =(json.u[0]||json.c[0]);
 return this.toContent(tx);
 }
@@ -153,17 +153,8 @@ return this.toContent(tx);
 		headings = [];
 		var ret = marked(content);
 		var indexTableHtml='';
-
-		if (component) {
-		var el = document.createElement('div')
-		var indexTable = new Vue(IndexTable);
-		indexTable.$set(indexTable, 'headings', headings);
-		indexTable.$options.router= component.$router;
-		indexTable.$mount(el);
-		await	indexTable.$nextTick();
-			indexTableHtml =indexTable.$el.innerHTML;
-			}
-			return ret.replace('__INDEX__GOES__HERE__',indexTableHtml);
+		if (!ret) return {html:ret,headings};
+		return {html:'<div>'+ret+'</div>', headings};
 
 	}
 }

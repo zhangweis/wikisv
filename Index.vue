@@ -31,7 +31,7 @@ export default {
   },
 	async loadIndex() {
 		var content = await wikiLoader.load({page: 'index'});
-this.content = await wikiLoader.marked(content.content);
+this.content = (await wikiLoader.marked(content.content)).html;
 	},
 	async loadRecentPages(params) {
 	var pages = await wikiLoader.recentPages(params);

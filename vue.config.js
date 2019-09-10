@@ -2,6 +2,7 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPl
 var Inliner = require('inliner');
 const exec = require('child_process').exec;
 const fs = require('fs');
+var address = require('address');
 
 var externals = {
 		vue:'Vue',
@@ -18,39 +19,11 @@ module.exports = {
 //  devServer:{https:true}
 configureWebpack:{
   externals,
-optimization: {
-    splitChunks: {
-			maxSize: 200*1000,
-			cacheGroups:{
-				'vue-moment':{
-          test: /vue-moment[\\/]/,
-          chunks: 'all',
-					enforce: true,
-				},
-				'vue-router':{
-          test: /vue-router[\\/]/,
-          chunks: 'all',
-					enforce: true,
-				},
-/*
-				'marked':{
-          test: /marked[\\/]/,
-          chunks: 'all',
-					enforce: true,
-				},
-				'vuecli':{
-          test: /cli-service-global[\\/]/,
-          chunks: 'all',
-				},
-*/
-				'vue-runtime':{
-          test: /vue\.runtime\./,
-					priority: 3,
-          chunks: 'all',
-				},
-			}
-    }
+  devServer: {
+    public: address.ip()+':8081',
+		port: 8081
   }
+
 },
 chainWebpack: config => {
 		    config.plugins.delete('preload');
@@ -77,7 +50,7 @@ console.log('inline done.');
                 // ...webpack-bundle-analyzer options here
             }]);
 },
-		
+runtimeCompiler:true,		
 
   publicPath: './'
 }

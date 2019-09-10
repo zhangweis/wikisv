@@ -18,16 +18,24 @@ Not found<br/>
 {{wiki.content}}
 </textarea>
   <div v-if='content'>
+<!--
     <div v-html="content"/>
-  
+        <v-runtime-template :template="content"></v-runtime-template>
+-->
+			<component v-bind:is="contentComponent"></component>  
   </div>
 </div>
 </template>
 <script>
 import wikiLoader from './wiki-loader'
 import {Progress} from './loading';
+import IndexTable from './IndexTable';
 
 export default {
+  components: {
+		IndexTable
+  },
+
 watch: {
     '$route' (to, from) {
 if (to.name=='page'&&from.name=='page'&&to.params.page==from.params.page) return this.toAnchor(to.params);
@@ -36,6 +44,8 @@ this.display(to.params);
     }
   },  data() {
     return {
+			contentComponent:{},
+			router:{},
 			showMd: false,
 			wiki:{tx:{tx:{}}},
       content:'',
@@ -51,7 +61,20 @@ loaded: false
 			this.loaded = true;
 			console.log(wiki);
 			this.wiki = wiki;
-			this.content = await wikiLoader.marked(content,this);
+			var markedContent = await wikiLoader.marked(content,this);
+console.log(markedContent);
+			this.content = markedContent.html;
+			this.contentComponent = {
+				template: markedContent.html,
+				components:{
+					IndexTable
+				},
+			 data: ()=>{
+					return {
+						headings:markedContent.headings
+					}
+				}
+			};
 			await this.$nextTick();
 			this.toAnchor(params);
 	},
@@ -63,6 +86,7 @@ loaded: false
   }
   },
     async mounted() {
+			this.router = this.$router;
 this.display(this.$route.params);
     }
 }

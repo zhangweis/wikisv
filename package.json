@@ -13,6 +13,7 @@
     "marked": "git+https://github.com/zhangweis/marked.git",
     "rxjs": "^6.5.3",
     "utf8": "^3.0.0",
+    "vue": "^2.6.10",
     "vue-loading-overlay": "^3.2.0",
     "vue-moment": "^4.0.0",
     "vue-money-button": "^0.2.3",

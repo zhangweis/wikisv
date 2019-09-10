@@ -50,18 +50,19 @@ export default {
     return {
 			loaded: false,
       name: '',
-      content: ''
+      content: '',
+			marked_content:''
     };
   },
 watch: {
     '$route' (to, from) {
 this.load(to.params);
-    }
+    },
+		async content(value, old) {
+			this.marked_content = (await wikiLoader.marked(value)).html;
+		}
   },
 computed: {
-marked_content() {
-return wikiLoader.marked(this.content);
-},
 outputs() {
 	var opreturn = this.opReturn;
 	return [{

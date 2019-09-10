@@ -2,6 +2,9 @@
 .item {
 padding: 5px
 }
+.heading-link {
+list-style-type:none
+}
 </style>
 <template>
   <div>
