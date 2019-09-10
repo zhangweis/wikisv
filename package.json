@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
   "dependencies": {
     "markdown-it": "^9.1.0",
     "marked": "git+https://github.com/zhangweis/marked.git",
     "rxjs": "^6.5.3",
+    "utf8": "^3.0.0",
     "vue-loading-overlay": "^3.2.0",
     "vue-moment": "^4.0.0",
     "vue-money-button": "^0.2.3",
@@ -15,13 +21,16 @@
     "vue-truncate-filter": "^1.1.7"
   },
   "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
     "vue-cli-plugin-webpack-bundle-analyzer": "^1.4.0",
     "vue-template-compiler": "^2.6.10"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+	"eslintConfig":{
+		"parserOptions":{
+		"legacyDecorators": true
+		}
+	},
   "author": "",
   "license": "ISC"
 }
