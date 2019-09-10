@@ -1,4 +1,4 @@
-const marked = require('marked');
+import * as marked from 'marked';
 const renderer = new marked.Renderer();
 function sanitize(str) {
   return str.replace(/&<"/g, function (m) {

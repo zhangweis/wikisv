@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueRx from 'vue-rx'
-
-var VueTruncate = require('vue-truncate-filter')
+import * as VueTruncate from 'vue-truncate-filter'
+import * as vueMoment from 'vue-moment';
 Vue.use(VueTruncate)
 
 Vue.use(VueRx)
@@ -14,7 +14,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 // Init plugin
 Vue.use(Loading);
-Vue.use(require('vue-moment'));
+Vue.use(vueMoment);
 
 //var element = document.createElement('div');
 //document.body.appendChild(element);
