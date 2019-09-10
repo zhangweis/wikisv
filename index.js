@@ -35,7 +35,11 @@ const routes = [
 		{ path: '*', redirect: '/' }
 ];
 const router = new VueRouter({
+//		mode: 'history',
     routes // short for `routes: routes`
-})
+});
+window.router = router;
+
+//router.formatPath = 
 app.router = router;
 new Vue(app).$mount('#app');

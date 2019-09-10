@@ -30,7 +30,7 @@ import {Progress} from './loading';
 export default {
 watch: {
     '$route' (to, from) {
-console.log(to, from);
+if (to.name=='page'&&from.name=='page'&&to.params.page==from.params.page) return this.toAnchor(to.params);
 this.display(to.params);
       // react to route changes...
     }
@@ -45,13 +45,21 @@ loaded: false
   methods: {
 	@Progress
    async display(params) {
-var wiki = await wikiLoader.load(params);
-if (!wiki) wiki = {tx:{tx:{}},blk:{},content:'',name:params.page};
-var content=wiki?wiki.content:``;
-this.loaded = true;
-console.log(wiki);
-this.wiki = wiki;
-this.content = wikiLoader.marked(content);
+			var wiki = await wikiLoader.load(params);
+			if (!wiki) wiki = {tx:{tx:{}},blk:{},content:'',name:params.page};
+			var content=wiki?wiki.content:``;
+			this.loaded = true;
+			console.log(wiki);
+			this.wiki = wiki;
+			this.content = await wikiLoader.marked(content,this);
+			await this.$nextTick();
+			this.toAnchor(params);
+	},
+	toAnchor(params) {
+		if (params.type&&params.type!='tx') {
+			var el = document.getElementById(params.type);
+			el&&el.scrollIntoView();
+		}
   }
   },
     async mounted() {

@@ -1,4 +1,5 @@
 import * as marked from 'marked';
+import IndexTable from './IndexTable';
 const renderer = new marked.Renderer();
 function sanitize(str) {
   return str.replace(/&<"/g, function (m) {
@@ -22,6 +23,19 @@ renderer.image = function (src, title, alt) {
   if (exec && exec[2]) res += '" width="' + exec[2]
   return res + '">'
 }
+var oldSlug = marked.Slugger.prototype.slug;
+marked.Slugger.prototype.slug =function (value){
+	this.lastSlug = oldSlug.apply(this, arguments);
+  return this.lastSlug;
+}
+var oldHeading = renderer.heading;
+var headings = [];
+renderer.heading = function(text, level, raw, slugger) {
+	var ret = oldHeading.apply(this, arguments);
+	if (headings.length ==0) ret = '__INDEX__GOES__HERE__'+ret; 
+	headings.push( {text,level,raw, slugId: slugger.lastSlug});
+	return ret;
+}
 var oldLink = renderer.link;
 renderer.link = function(href, title, text) {
 
@@ -35,12 +49,6 @@ link:function(cap){
 renderer
 });
 
-/*var MarkdownIt = require('markdown-it');
-var md = new MarkdownIt({
-linkify: true,
-breaks:true
-});
-*/
 class Loader {
 	async recentPages({limit=20}) {
 		var list = [];
@@ -141,8 +149,22 @@ return this.toContent(tx);
 		}
 		return page;
 	}
-	marked(content) {
-		return marked(content);
+	async marked(content, component) {
+		headings = [];
+		var ret = marked(content);
+		var indexTableHtml='';
+
+		if (component) {
+		var el = document.createElement('div')
+		var indexTable = new Vue(IndexTable);
+		indexTable.$set(indexTable, 'headings', headings);
+		indexTable.$options.router= component.$router;
+		indexTable.$mount(el);
+		await	indexTable.$nextTick();
+			indexTableHtml =indexTable.$el.innerHTML;
+			}
+			return ret.replace('__INDEX__GOES__HERE__',indexTableHtml);
+
 	}
 }
 export default new Loader();

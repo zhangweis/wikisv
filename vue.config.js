@@ -12,7 +12,7 @@ var externals = {
 		'vue-rx':'VueRx',
   };
 	if (process.env.NODE_ENV!='production') externals = {
-		'vue-router':'VueRouter'
+//		'vue-router':'VueRouter'
 	};
 module.exports = {
 //  devServer:{https:true}
