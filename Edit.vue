@@ -26,9 +26,22 @@
 </div>
 </template>
 <script>
+import * as utf8 from 'utf8';
+
 import MoneyButton from 'vue-money-button'
 import {Progress} from './loading';
 import wikiLoader from './wiki-loader'
+function String2Hex(tmp) {
+    var str = '';
+    for(var i = 0; i < tmp.length; i++) {
+        str += tmp[i].charCodeAt(0).toString(16).padStart(2, '0');
+    }
+    return str;
+}
+
+function scriptsForUtf8(strings) {
+	return strings.map(s=>String2Hex(utf8.encode(s))).join(' ');
+}
 export default {
   components: {
     MoneyButton
@@ -58,7 +71,7 @@ outputs() {
     }]
 },
 opReturn() {
-	var out = 'OP_FALSE OP_RETURN '+Buffer.from('19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut').toString('hex')+' ' + Buffer.from(this.content).toString('hex')+' '+Buffer.from('text/markdown').toString('hex')+' '+Buffer.from('utf8').toString('hex')+' ' +Buffer.from(this.name+'.md').toString('hex');
+	var out = 'OP_FALSE OP_RETURN '+scriptsForUtf8(['19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut',this.content,'text/markdown','utf8',this.name+'.md']);
 
 	console.log(out);
 return out;
