@@ -73,6 +73,7 @@ console.log('inline done.');
 
 		config.plugin("webpack-report")
             .use(BundleAnalyzerPlugin, [{
+							analyzerMode:'static'
                 // ...webpack-bundle-analyzer options here
             }]);
 },
