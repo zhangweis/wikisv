@@ -16,15 +16,16 @@ content: ']'
 </template>
 <script>
 export default {
+  props: {
+    shown: Boolean
+  },
   data() {
     return {
-      shown: true
     }
   },
   methods:{
     toggle() {
-      this.shown = !this.shown;
-      this.$emit('toggled', this.shown);
+      this.$emit('toggled');
     }
   }
 }

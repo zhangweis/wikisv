@@ -32,7 +32,7 @@ var oldHeading = renderer.heading;
 var headings = [];
 renderer.heading = function(text, level, raw, slugger) {
 	var ret = oldHeading.apply(this, arguments);
-	if (headings.length ==0) ret = '<index-table :headings="headings"/>'+ret;//'__INDEX__GOES__HERE__'+ret; 
+	if (headings.length ==0) ret = '<index-table :headings="headings" :page="page" :init-shown="tocInitShown"/>'+ret;//'__INDEX__GOES__HERE__'+ret; 
 	headings.push( {text,level,raw, slugId: slugger.lastSlug});
 	return ret;
 }

@@ -21,7 +21,7 @@ padding: 7px;
   <div class='toc' v-if='headings.length'>
 		<div class='toctitle'>
 			<h2>TOC</h2>
-			<toggle-span @toggled='toggled'/>
+			<toggle-span @toggled='toggled' :shown='shown'/>
 		</div>
     <ul v-if='shown'>
     <li v-for="heading in headings" :style='{"padding-left": (heading.level*10-10)+"px"}' class='heading-link'>
@@ -44,20 +44,29 @@ export default {
 	},
   props:{
   headings: Array,
+	page: String,
+	initShown: {
+		type: Boolean,
+		default: true,
+	}
   },
+	mounted() {
+		this.shown = this.initShown;
+	},
   methods:{
 		toggled($event) {
-			this.shown=$event;
+			this.shown=!this.shown;
+console.log(this.shown);
 		},
 		scrollTo(heading) {
 			try {
-			this.$router.push({name:'page',params:{page:this.$route.params.page,type:heading.slugId}});
+			this.$router.push({name:'page',params:{page:this.page,type:heading.slugId}});
 			} finally {
 			document.getElementById(heading.slugId).scrollIntoView();
 			}
 		},
     hrefFromSlug(slugId) {
-      var {href, route, location}=this.$router.resolve({ name: 'page', params: { page: this.$route.params.page,type:slugId }});
+      var {href, route, location}=this.$router.resolve({ name: 'page', params: { page: this.page,type:slugId }});
       return {href, path:route.path};
     },
   }

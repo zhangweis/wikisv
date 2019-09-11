@@ -11,15 +11,17 @@
  @ {{(page.tx.blk||{}).t  | moment("from", "now")}}
 </div>
 <hr/>
-<div v-html='content'/>
+			<component v-bind:is="contentComponent"></component>  
 </div>
 </template>
 <script>
 import wikiLoader from './wiki-loader'
 import {Progress} from './loading';
+import IndexTable from './IndexTable';
 export default {
   data() {
     return {
+			contentComponent:{template:'<div/>'},
 			content:'',
       recentPages:[]
     }
@@ -31,7 +33,21 @@ export default {
   },
 	async loadIndex() {
 		var content = await wikiLoader.load({page: 'index'});
-this.content = (await wikiLoader.marked(content.content)).html;
+		var {headings,html} = (await wikiLoader.marked(content.content));
+		this.content = html;
+			this.contentComponent = {
+				template: html,
+				components:{
+					IndexTable
+				},
+			 data: ()=>{
+					return {
+						page: 'index',
+						tocInitShown:false,
+						headings
+					}
+				}
+			};
 	},
 	async loadRecentPages(params) {
 	var pages = await wikiLoader.recentPages(params);

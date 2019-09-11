@@ -71,7 +71,9 @@ console.log(markedContent);
 				},
 			 data: ()=>{
 					return {
-						headings:markedContent.headings
+						headings:markedContent.headings,
+						tocInitShown:true,
+						page: wiki.name,
 					}
 				}
 			};
