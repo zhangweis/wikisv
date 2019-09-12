@@ -25,7 +25,7 @@ padding: 7px;
 		</div>
     <ul v-if='shown'>
     <li v-for="heading in headings" :style='{"padding-left": (heading.level*10-10)+"px"}' class='heading-link'>
-      <a :href='hrefFromSlug(heading.slugId).href' :slugid='heading.slugId' @click='scrollTo(heading)' onclick='return false;'>{{heading.text}}</a>
+<router-link :to="{ name: 'page', params: { page: page,type:heading.slugId }}">{{heading.text}}</router-link>
 <br/>
     </li>
     </ul>
@@ -56,19 +56,7 @@ export default {
   methods:{
 		toggled($event) {
 			this.shown=!this.shown;
-console.log(this.shown);
 		},
-		scrollTo(heading) {
-			try {
-			this.$router.push({name:'page',params:{page:this.page,type:heading.slugId}});
-			} finally {
-			document.getElementById(heading.slugId).scrollIntoView();
-			}
-		},
-    hrefFromSlug(slugId) {
-      var {href, route, location}=this.$router.resolve({ name: 'page', params: { page: this.page,type:slugId }});
-      return {href, path:route.path};
-    },
   }
 }
 </script>

@@ -17,12 +17,10 @@
 <script>
 import wikiLoader from './wiki-loader'
 import {Progress} from './loading';
-import IndexTable from './IndexTable';
 export default {
   data() {
     return {
 			contentComponent:{template:'<div/>'},
-			content:'',
       recentPages:[]
     }
   },
@@ -33,21 +31,13 @@ export default {
   },
 	async loadIndex() {
 		var content = await wikiLoader.load({page: 'index'});
-		var {headings,html} = (await wikiLoader.marked(content.content));
-		this.content = html;
-			this.contentComponent = {
-				template: html,
-				components:{
-					IndexTable
-				},
-			 data: ()=>{
+		var markedContent = (await wikiLoader.marked(content.content));
+			this.contentComponent = markedContent.toComponent(()=>{
 					return {
 						page: 'index',
 						tocInitShown:false,
-						headings
 					}
-				}
-			};
+				});
 	},
 	async loadRecentPages(params) {
 	var pages = await wikiLoader.recentPages(params);

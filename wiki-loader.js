@@ -8,6 +8,17 @@ function sanitize(str) {
     return "&quot;"
   })
 }
+function generateBoundary() {
+  // This generates a 50 character boundary similar to those used by Firefox.
+  // They are optimized for boyer-moore parsing.
+	var boundary='';
+  for (var i = 0; i < 24; i++) {
+    boundary += Math.floor(Math.random() * 10).toString(16);
+  }
+
+  return `<${boundary}>`;
+};
+
 function linkUrl(href,from) {
   var exec;
   exec = /^wiki:(.*)$/.exec(href);
@@ -30,9 +41,18 @@ marked.Slugger.prototype.slug =function (value){
 }
 var oldHeading = renderer.heading;
 var headings = [];
+renderer.addBoundary=function(content){
+	if (!this.separator) {
+		this.separator=generateBoundary();
+		this.separatorCount=0;
+	}
+	this.separatorCount++;
+	return this.separator+content+this.separator;
+}
 renderer.heading = function(text, level, raw, slugger) {
 	var ret = oldHeading.apply(this, arguments);
-	if (headings.length ==0) ret = '<index-table :headings="headings" :page="page" :init-shown="tocInitShown"/>'+ret;//'__INDEX__GOES__HERE__'+ret; 
+	
+	if (headings.length ==0) ret = this.addBoundary('<index-table/>')+ret;
 	headings.push( {text,level,raw, slugId: slugger.lastSlug});
 	return ret;
 }
@@ -149,13 +169,34 @@ return this.toContent(tx);
 		}
 		return page;
 	}
-	async marked(content, component) {
+	async marked(content, replaces={'<index-table/>':'<index-table :headings="headings" :page="page" :init-shown="tocInitShown"/>'}) {
 		headings = [];
-		var ret = marked(content);
+		var ret;
+		var errorCount = 0;
+		do {
+		delete renderer.boundary;
+		renderer.separatorCount = 0;
+		ret = marked(content);
 		var indexTableHtml='';
-		if (!ret) return {html:ret,headings};
-		return {html:'<div>'+ret+'</div>', headings};
+		} while (errorCount++<3&&renderer.separatorCount&&renderer.separatorCount*2!=ret.split(renderer.separator).length-1);
+		var retObj = {headings, html:!ret?ret:'<div>'+ret+'</div>'};
+		retObj=Object.assign(retObj, {separator:renderer.separator,replace:function(from,to){this.html=this.html.replace(this.separator+from+this.separator,to)}});
+		retObj.toComponent=function(data){
+			return {
+				template: this.html,
+				components:{
+					IndexTable
+				},
+			 data:()=>{
+			 	return Object.assign({headings:this.headings}, data());
+			 }
+			};
+		};
 
+		Object.keys(replaces).forEach(key=>{
+			retObj.replace(key,replaces[key]);
+		});
+		return retObj;
 	}
 }
 export default new Loader();
